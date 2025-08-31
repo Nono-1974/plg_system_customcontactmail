@@ -33,7 +33,7 @@ class PlgSystemCustomContactMail extends CMSPlugin
                     $app->setUserState('com_contact.phone', $phone);
                 }
                 else
-                    Log::add('Telpehone non trouvé:'.$input->getString('contact_name', '');, Log::INFO, 'plg_system_customcontactmail');
+                    Log::add('Telpehone non trouvé:'.$input->getString('contact_name', ''), Log::INFO, 'plg_system_customcontactmail');
             }
         }
     }
