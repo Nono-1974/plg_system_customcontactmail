@@ -5,34 +5,59 @@ use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 
-public function onContentAfterSave($context, $table, $isNew)
+class PlgSystemCustomContactMail extends CMSPlugin
+{
+    public function onAfterRoute()
     {
-        // On cible bien la soumission d'un nouveau contact
-        if ($context === 'com_contact.contact' && $isNew)
+        Log::addLogger(
+            ['text_file' => 'plg_system_customcontactmail.log.php'],
+            Log::ALL,
+            ['plg_system_customcontactmail']
+        );
+        
+        $app = Factory::getApplication();
+
+        if ($app->isClient('site'))
         {
-            $input = Factory::getApplication()->input;
-            $phone = $input->getString('contact_telephone', '');
+            $input = $app->input;
+            $option = $input->getCmd('option');
+            $task = $input->getCmd('task');
 
-            // Personnalisation du mail à envoyer
-            $mailer = Factory::getMailer();
-
-            // Destinataire (par ex. admin ou contact)
-            $recipient = $table->email;
-            $mailer->addRecipient($recipient);
-
-            // Sujet
-            $mailer->setSubject('Nouveau message de contact avec téléphone');
-
-            // Corps du mail avec le champ téléphone ajouté
-            $body = "Nom : " . $table->name . "\n";
-            $body .= "Email : " . $table->email . "\n";
-            $body .= "Téléphone : " . $phone . "\n";
-            $body .= "Message : " . $table->message . "\n";
-
-            $mailer->setBody($body);
-
-            // Envoi du mail
-            $mailer->send();
+            // Lors de la soumission du formulaire contact
+            if ($option === 'com_contact' && ($task === 'contact.submit' || $task === 'contact_form.submit'))
+            {
+                $phone = $input->getString('contact_telephone', '');
+                if ($phone)
+                {
+                    $app->setUserState('com_contact.phone', $phone);
+                }
+                else
+                    Log::add('Telpehone non trouvé:'.$input->getString('contact_name', '');, Log::INFO, 'plg_system_customcontactmail');
+            }
         }
     }
-?>
+
+    public function onContentSendMail($context, $data)
+    {
+        if ($context === 'com_contact.contact')
+        {
+            $app = Factory::getApplication();
+            $phone = $app->getUserState('com_contact.phone', '');
+
+             Log::add('Ajout du telephone au mail:'.$phone, Log::INFO, 'plg_system_customcontactmail');
+
+            if ($phone)
+            {
+                // Ajouter le téléphone au corps du mail
+                if (isset($data->body))
+                {
+                    $data->body .= "\nTéléphone : " . $phone;
+                }
+                else
+                {
+                    $data->body = "Téléphone : " . $phone;
+                }
+            }
+        }
+    }
+}
