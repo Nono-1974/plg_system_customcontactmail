@@ -11,7 +11,7 @@ public function onContentAfterSave($context, $table, $isNew)
         if ($context === 'com_contact.contact' && $isNew)
         {
             $input = Factory::getApplication()->input;
-            $phone = $input->getString('phone', '');
+            $phone = $input->getString('contact_telephone', '');
 
             // Personnalisation du mail à envoyer
             $mailer = Factory::getMailer();
