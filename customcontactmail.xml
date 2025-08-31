@@ -2,10 +2,9 @@
 <extension type="plugin" group="system" method="upgrade">
     <name>Plugin pour modifier le mail de contact</name>
     <version>1.0.0</version>
-    <createdate></createdate>
+    <author>Arnaud D.</author>
+    <creationDate>2025-08-30</creationDate>
     <description>Ajoute un champ téléphone au formulaire contact et envoie dans mail</description>
-    <creationDate>2025-08-31</creationDate>
-    <author>Votre Nom</author>
     <files>
         <filename plugin="customcontact">customcontact.php</filename>
         <folder>forms</folder>
