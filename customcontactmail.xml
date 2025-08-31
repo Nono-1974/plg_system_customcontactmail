@@ -6,7 +6,6 @@
     <creationDate>2025-08-30</creationDate>
     <description>Ajoute un champ téléphone au formulaire contact et envoie dans mail</description>
     <files>
-        <filename plugin="customcontact">customcontact.php</filename>
-        <folder>forms</folder>
+        <filename plugin="customcontactmail">customcontactmail.php</filename>
     </files>
 </extension>
