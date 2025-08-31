@@ -4,6 +4,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
+use Joomla\CMS\Log\Log;
 
 class PlgSystemCustomContactMail extends CMSPlugin
 {
@@ -57,6 +58,8 @@ class PlgSystemCustomContactMail extends CMSPlugin
                 {
                     $data->body = "Téléphone : " . $phone;
                 }
+
+                Log::add('Envoie du mail:'.json_encode($data), Log::INFO, 'plg_system_customcontactmail');
             }
         }
     }
